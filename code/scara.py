@@ -13,6 +13,27 @@ from tqdm import tqdm
 
 logging.basicConfig(level=logging.INFO)
 
+import matplotlib.pyplot as plt
+import numpy as np
+import roboticstoolbox as rtb
+from  roboticstoolbox import DHRobot, RevoluteDH
+
+class Scara2DOF():
+
+    def __init__(self):
+        ## Assigning DH Parameters for scara Robot
+        self.robot = DHRobot([
+                    RevoluteDH(a=8),
+                    RevoluteDH(a=6),], name="Scara2DOF")
+                
+        logging.info("\n######\nDH Parameter for Scara 2DOF Robot :")
+        logging.info(f"{self.robot}")
+
+    def plot(self,qs, dt, gif_filename):
+        axes = np.array([-14,14,-14,14,-14,14])
+        self.robot.plot(qs,dt=dt, backend='pyplot', eeframe=True,jointaxes=True,limits=axes, movie=gif_filename)
+
+
 class Manipulator:
 
     # state variable
@@ -49,12 +70,14 @@ class Manipulator:
     # N
     N0 = N.subs({**variables,**{e:1}})
 
-    def __init__(self,plot=True, path2Store : Union[str,None]=None):
+    def __init__(self,plot=True, path2Store : Union[str,None]=None,getAnimation : bool = True):
         logging.info("Initializing the Manipulator")
         self.get_dynamics()
         self.get_optimal_control()
         self.path = path2Store
         self.plot = plot
+        self.getAnimation = getAnimation
+        self.scara = Scara2DOF()
 
     def get_dynamics(self):
         self.A = Matrix([[0,0,1,0],[0,0,0,1],[0,0,0,0],[0,0,0,0]])
@@ -98,6 +121,7 @@ class Manipulator:
         q2_dots = []
         u1s = []
         u2s = []
+        Qs = []
         Ts = np.arange(0,total_time,dt)
         logging.info(f"Loop over total_time : {total_time}| and with a time step | dt = {dt}")
         X_states = {self.q1:math.radians(60),self.q2:math.radians(-30),self.q1_dot:0,self.q2_dot:0}
@@ -116,6 +140,7 @@ class Manipulator:
             u2s.append(optimal_control_input[1])
             q1s.append(X_states[self.q1])
             q2s.append(X_states[self.q2])
+            Qs.append([X_states[self.q1],X_states[self.q2]])
             q1_dots.append(X_states[self.q1_dot])
             q2_dots.append(X_states[self.q2_dot])
 
@@ -123,7 +148,17 @@ class Manipulator:
             curr_state=next_state
         if self.plot:
             self.plotData(q1s,q2s,q1_dots,q2_dots,u1s,u2s,Ts,epsilon)
-
+            plt.waitforbuttonpress()
+            plt.close()
+            if self.getAnimation:
+                gif_filename = os.path.splitext(self.path)[0]+".gif"
+                Qs = np.array(Qs)
+                m = Qs.shape[0]
+                if m>100:
+                    new_m = m//100
+                    Qs = Qs[::new_m,:]
+                self.scara.plot(Qs,dt,gif_filename) # for faster graph multiplying dt with 10
+                plt.close()
     def plotData(self,q1s:list,q2s:list,q1_dots:list,q2_dots:list,u1s:list,u2s:list,Ts:list,epsilon:float):
         # plotting
         fig,axs = plt.subplots(nrows=3,ncols=2,figsize=(15,10))
@@ -190,7 +225,7 @@ if __name__ == "__main__":
     else:
         path=None
     
-    manipulator = Manipulator(path2Store=path)
+    manipulator = Manipulator(path2Store=path,getAnimation=True)
     logging.info("NOTE : Stabilising the manipulator angles to 0 degree, from q1 = 60 deg and q2 = -30 deg")
     logging.info(f"Running Controller for epsilon = {epsilon}")
     manipulator.run_controller(epsilon=epsilon)

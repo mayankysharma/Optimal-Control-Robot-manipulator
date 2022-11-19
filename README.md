@@ -8,7 +8,11 @@
 With Uncertainty in state dynamics and input matrix, for Robot Manipulator, the controlling become difficult and there different ways to design controller, either using Robust Control Approach or Optimal Control Approach. Here we're implementing the paper which uses Optimal Control Approach to solve the controlling problem of Robot Manipulator.
 
 ## Results for $\epsilon = 0$
+### Plot
 ![](results/epsilon0.png)
+
+### Animation
+![](results/epsilon0.gif)
 
 
 ## Install dependencies

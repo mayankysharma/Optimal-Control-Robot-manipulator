@@ -1,4 +1,6 @@
-matplotlib
+matplotlib==3.6.2
 sympy
 numpy
 tqdm
+pillow
+roboticstoolbox-python
