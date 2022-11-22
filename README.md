@@ -39,6 +39,6 @@ Interactive code can be found [here](code/interative_scara.ipynb)
 
 
 ## Reference:
-* An optimal control paper
+* Feng Lin and R. D. Brandt, "An optimal control approach to robust control of robot manipulators," in IEEE Transactions on Robotics and Automation, vol. 14, no. 1, pp. 69-77, Feb. 1998, doi: 10.1109/70.660845.
 * https://automaticaddison.com/linear-quadratic-regulator-lqr-with-python-code-example/
 
