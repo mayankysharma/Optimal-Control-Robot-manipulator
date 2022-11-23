@@ -35,6 +35,7 @@ python3 code/scara.py results/e_0.png 0
     - animation output = `True`, and need to set it to `False` manually in line 228 in the [file](code/scara.py), if animation is not needed.
 * `dt` should be very small, currently we are using dt = 0.01.
 * `total time` taken as `50 sec` instead of `100 sec` because of higher code runtime.
+    - for changing `total_time`, in line 233, when calling method `run_controller`, you can give `total_time` as argument, [file](code/ scara.py).
 ## Interactive code
 Interactive code can be found [here](code/interative_scara.ipynb)
 

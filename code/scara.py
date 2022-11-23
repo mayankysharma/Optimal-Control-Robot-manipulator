@@ -230,4 +230,4 @@ if __name__ == "__main__":
     manipulator = Manipulator(path2Store=path,getAnimation=animation)
     logging.info("NOTE : Stabilising the manipulator angles to 0 degree, from q1 = 60 deg and q2 = -30 deg")
     logging.info(f"Running Controller for epsilon = {epsilon}")
-    manipulator.run_controller(epsilon=epsilon)
+    manipulator.run_controller(epsilon=epsilon, total_time=50)
