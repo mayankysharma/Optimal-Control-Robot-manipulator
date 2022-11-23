@@ -111,7 +111,7 @@ class Manipulator:
         return next_state
 
 
-    def run_controller(self, total_time:int=100, dt:float=0.01, epsilon:float = 0):
+    def run_controller(self, total_time:int=50, dt:float=0.01, epsilon:float = 0):
         
         load_variables = {self.e:epsilon}
         
@@ -158,7 +158,7 @@ class Manipulator:
                 if m>100:
                     new_m = m//100
                     Qs = Qs[::new_m,:]
-                self.scara.plot(Qs,dt,gif_filename) # for faster graph multiplying dt with 10
+                self.scara.plot(Qs,0.1,gif_filename) # for faster graph multiplying dt with 10
                 plt.close()
     def plotData(self,q1s:list,q2s:list,q1_dots:list,q2_dots:list,u1s:list,u2s:list,Ts:list,epsilon:float):
         # plotting
