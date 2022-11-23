@@ -90,12 +90,12 @@ class Manipulator:
         X2 = Matrix([[self.q1_dot],[self.q2_dot]])
         self.U0 = -X1-K*X2
 
-    def get_uncertainties(self,M_sub, N_sub, N0):
+    def get_uncertainties(self,M_sub, N_sub, N0, M0):
         # Matched uncertainty in system dynamics, 
         f = M_sub.inv()*(N0-N_sub)
 
         # uncertainty input matrix, 
-        h = M_sub.inv()*M_sub-sympy.eye(2)
+        h = M_sub.inv()*M0-sympy.eye(2)
 
         return f,h
 
@@ -111,7 +111,7 @@ class Manipulator:
         return next_state
 
 
-    def run_controller(self, total_time:int=100, dt:float=0.1, epsilon:float = 0):
+    def run_controller(self, total_time:int=100, dt:float=0.01, epsilon:float = 0):
         
         load_variables = {self.e:epsilon}
         
@@ -133,8 +133,9 @@ class Manipulator:
             M_sub = self.M.subs({**self.variables, **load_variables,**X_states})
             N_sub = self.N.subs({**self.variables, **load_variables,**X_states})
             N0_sub = self.N0.subs(X_states)
+            M0_sub = self.M0.subs(X_states)
 
-            f,h = self.get_uncertainties(M_sub,N_sub,N0_sub)
+            f,h = self.get_uncertainties(M_sub,N_sub,N0_sub,M0_sub)
             
             u1s.append(optimal_control_input[0])
             u2s.append(optimal_control_input[1])

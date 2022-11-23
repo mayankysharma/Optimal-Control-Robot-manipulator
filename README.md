@@ -29,10 +29,11 @@ python3 code/scara.py <path/to/store/result image file> <epsilon value b/w (0,1)
 python3 code/scara.py results/e_0.png 0
 ```
 ### Note:
-* If path argument are not given, then script will exit.
+* If `path` argument are not given, then script will exit.
 * By default 
-    - epsilon = 0 if epsilon argument is not given.
+    - `epsilon = 0` if `epsilon` argument is not given.
     - animation output = `True`, and need to set it to `False` manually in line 228 in the [file](code/scara.py), if animation is not needed.
+* `dt` should be very small, currently we are using dt = 0.01.
 
 ## Interactive code
 Interactive code can be found [here](code/interative_scara.ipynb)
